@@ -1,11 +1,12 @@
 /**********************************************
 # Author: guojunfeng
 # GitHub: https://github.com/guojunfengcode
-# Last modified: 2020-10-29 18:16
+# Last modified: 2020-10-30 15:47
 # Filename: main.cpp
 # Description: 
 **********************************************/
 #include "myarray.hpp"
+#include <algorithm>
 using namespace std;
 
 template<class T>
@@ -17,11 +18,18 @@ void printfarray(const Myarray<T> &m) {
 	cout << endl;
 }
 void printfpersonarray(Myarray<person> &m) {
+#if 0
 	int i;
 	for (i = 0; i < m.getsize(); i++) {
 		cout << m[i].name << ":" << m[i].age << " " << endl;
 	}
+#endif
+	reverse(m.begin(), m.end());
+	for (Myarray<person>::iterator it = m.begin(); it != m.end(); it++) {
+		cout << *it << endl;
+	}	
 }
+
 int main() {
 
 	Myarray<int> m(6);

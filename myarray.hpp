@@ -1,7 +1,7 @@
 /**********************************************
 # Author: guojunfeng
 # GitHub: https://github.com/guojunfengcode
-# Last modified: 2020-10-29 14:16
+# Last modified: 2020-10-30 15:47
 # Filename: myarray.cpp
 # Description: 
 **********************************************/
@@ -21,13 +21,21 @@ public:
 	int age;
 };
 
+ostream& operator<<(ostream &cout, person p) {
+	cout << "name=" << p.name << "  " << "age=" << p.age;
+	return cout;
+}
+
 template<class T>
 class Myarray{
 public:
+	typedef T* iterator;
 	Myarray(int cap) {
 		this->cap = cap;
 		this->size = 0;
 		this->arr = new T[this->cap];
+		this->start = NULL;
+		this->finsh = NULL;
 	}
 
 	Myarray(const Myarray &m) {
@@ -38,6 +46,8 @@ public:
 		for(i = 0; i < this->size; i++) {
 			this->arr[i] = m.arr[i];
 		}
+		this->start = &this->arr[0];
+		this->finsh = &this->arr[this->size];
 
 	}
 
@@ -59,6 +69,8 @@ public:
 				this->arr[i] = m.arr[i];
 			}
 		}
+		this->start = m.start;
+		this->finsh = m.finsh;
 		return *this;
 		
 	}
@@ -69,8 +81,13 @@ public:
 		}
 		this->arr[this->size] = value;
 		this->size++;
+		if (this->start == NULL) {
+			this->start = &this->arr[this->size-1];
+			this->finsh = &this->arr[this->size];
+		} else {
+			this->finsh = &this->arr[this->size];
+		}
 	}
-
 	void del() {
 		if (this->size == 0) {
 			return;
@@ -83,12 +100,21 @@ public:
 		} else {
 			cout << "not's pod type" << endl;
 		}
+		this->finsh = &this->arr[this->size];
 	}
 
 	T& operator[](int index) const{
 		assert(index < this->size);
 		return this->arr[index];
 	}
+	iterator begin() {
+		return this->start;
+	}
+
+	iterator end() {
+		return this->finsh;
+	}
+	
 	int getsize() const{
 		return this->size;
 	}
@@ -103,11 +129,15 @@ public:
 		}
 		size = 0;
 		cap = 0;
+		start = NULL;
+		finsh = NULL;
 	}
 
 
 private:
 	T *arr;
+	iterator start;
+	iterator finsh;
 	int size;
 	int cap;
 };
